@@ -1,7 +1,6 @@
 var agencies = {}
   , map
-  , markerGroup = new L.LayerGroup()
-  , cloudmadeAPI = '7a80f6e2fb44480bb068f596f4736073';
+  , markerGroup = new L.LayerGroup();
 
 $(document).ready(function(){
 
@@ -10,15 +9,21 @@ $(document).ready(function(){
 
   //setup map
   map = new L.Map('map');
-  var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/' + cloudmadeAPI + '/997/256/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-    maxZoom: 18
-  });
-  map.addLayer(cloudmade);
+
+  // from http://switch2osm.org/using-tiles/getting-started-with-leaflet/
+
+  // create the tile layer with correct attribution
+  var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+  var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 18, attribution: osmAttrib});		
+
+  map.addLayer(osm);
 
   $('#data').on('click', 'tbody tr', function(){
     showLoading();
-    $('#data').empty()
+
+    // Do not delete this entry, as we need this data below
+    //$('#data').empty()
 
     var viewType = $('#data').data('view-type');
     if(viewType == 'agencies') {
